@@ -196,8 +196,9 @@ model, scaler, model_loaded = load_prediction_model()
 
 def page_home():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    # Assuming brain artifacts path based on my environment context
-    hero_image_path = r"C:\Users\OM\.gemini\antigravity\brain\c0a33ad1-dba3-455b-829b-7c863a967c17\cardio_ai_hero_1790227463924.png"
+    hero_image_path = os.path.join(current_dir, "cardio_ai_hero.png")
+    if not os.path.exists(hero_image_path):
+        hero_image_path = r"C:\Users\OM\.gemini\antigravity\brain\ab13f1b3-31d6-43b0-ab62-96343d8a7a41\cardio_ai_hero_1790266043652.png"
     
     col_img, col_txt = st.columns([1, 1.5], gap="large")
     with col_img:
@@ -423,72 +424,144 @@ def page_about():
         <div style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;'>
             <div>
                 <div style='display:inline-block; background:linear-gradient(90deg, #38bdf8, #818cf8); color:white; padding:4px 12px; border-radius:20px; font-weight:800; font-size:10px; letter-spacing:1px; margin-bottom:8px;'>AI PERFORMANCE ENGINE</div>
-                <h2 style='margin-top:0; color:{text_color}; font-weight:800; font-size:24px; margin-bottom:0;'>Model Analytics</h2>
+                <h2 style='margin-top:0; color:{text_color}; font-weight:800; font-size:24px; margin-bottom:0;'>Diagnostic Model Analytics</h2>
             </div>
             <div style='text-align:right'>
-                <span style='color:{text_muted}; font-size: 12px; font-weight:600;'>BACKEND</span><br/>
-                <span style='color:{text_color}; font-weight:700; font-size: 14px;'>Logistic Regression</span>
+                <span style='color:{text_muted}; font-size: 12px; font-weight:600;'>BACKEND ENGINE</span><br/>
+                <span style='color:{text_color}; font-weight:700; font-size: 14px;'>Scikit-Learn Logistic Regression</span>
             </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     metrics = [
-        ("🎯 Accuracy", 78.0, "#38bdf8"),
-        ("📈 ROC-AUC Score", 73.0, "#818cf8"),
-        ("🔬 Precision", 85.0, "#a78bfa"),
-        ("💓 Recall Sensitivity", 88.0, "#f472b6"),
+        ("🎯 Model Accuracy", "78.0%", 78.0, "#38bdf8", "Overall correctness across 70,000 diagnostic samples"),
+        ("📈 ROC-AUC Score", "0.730", 73.0, "#818cf8", "Discriminative capacity between disease & healthy states"),
+        ("🔬 Positive Precision", "85.0%", 85.0, "#a78bfa", "Probability that positive predictions are true cases"),
+        ("💓 Sensitivity Recall", "88.0%", 88.0, "#f472b6", "Ability to correctly identify true positive heart disease"),
     ]
 
     m1, m2 = st.columns(2)
-    for i, (label, value, color) in enumerate(metrics):
+    for i, (label, val_str, value, color, desc) in enumerate(metrics):
         with (m1 if i % 2 == 0 else m2):
             st.markdown(f"""
-            <div style='background:{card_bg}; padding:16px; border-radius:12px; border:1px solid {border_color}; margin-bottom:12px;'>
-                <div style='display:flex; justify-content:space-between; margin-bottom:10px;'>
+            <div style='background:{card_bg}; padding:18px; border-radius:12px; border:1px solid {border_color}; margin-bottom:14px;'>
+                <div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;'>
                     <span style='color:{text_muted}; font-weight:600; font-size:14px;'>{label}</span>
-                    <span style='color:{color}; font-weight:800; font-size:18px;'>{value}%</span>
+                    <span style='color:{color}; font-weight:800; font-size:20px;'>{val_str}</span>
                 </div>
-                <div style='height:6px; background:{border_color}; border-radius:3px; overflow:hidden;'>
-                    <div style='width:{value}%; height:100%; background:{color}; border-radius:3px;'></div>
+                <div style='height:7px; background:{border_color}; border-radius:4px; overflow:hidden; margin-bottom:8px;'>
+                    <div style='width:{value}%; height:100%; background:{color}; border-radius:4px;'></div>
                 </div>
+                <div style='font-size:12px; color:{text_muted};'>{desc}</div>
             </div>
             """, unsafe_allow_html=True)
-    
-    # Prediction Related Information
+
+    # Mathematical & Prediction Methodology
     st.markdown(f"""
-    <div style='background:{card_bg}; border:1px solid {border_color}; border-radius:12px; padding:20px; margin-bottom: 24px;'>
-        <div style='font-weight:800; font-size:18px; margin-bottom:12px; color:{primary_accent};'>🧠 Prediction Methodology & Inference Insight</div>
-        <p style='color:{text_color}; font-size:14px; line-height:1.7; font-weight: 500;'>
-            The CardioCare diagnostic engine calculates a <b>Risk Probability Score (0-100%)</b> by running patient biometric markers through our standardized Logistic Regression model. 
+    <div style='background:{card_bg}; border:1px solid {border_color}; border-radius:14px; padding:22px; margin-bottom: 24px;'>
+        <div style='font-weight:800; font-size:18px; margin-bottom:12px; color:{primary_accent};'>🧠 Mathematical Inference Pipeline</div>
+        <p style='color:{text_color}; font-size:14px; line-height:1.7; margin-bottom:12px;'>
+            CardioCare processes patient health markers through a multi-stage statistical pipeline:
         </p>
-        <ul style='color:{text_muted}; font-size:14px; line-height:1.6; padding-left: 20px;'>
-            <li><b>Feature Evaluation:</b> Blood pressure (systolic/diastolic), age-correlated BMI, and cholesterol profiles serve as the highest weighted coefficients.</li>
-            <li><b>Heuristic Adjustments:</b> Self-reported behavioral risk factors (e.g., smoking, physical inactivity) are integrated post-scaling to adjust probability thresholds and remove dataset anomalies.</li>
-            <li><b>Classification Logic:</b> A rigid <b>50% decision boundary</b> is utilized to flag a positive classification for potential cardiovascular pathology.</li>
-        </ul>
+        <div style='background:{bg_color}; border:1px solid {border_color}; border-radius:10px; padding:16px; margin-bottom:14px;'>
+            <div style='font-weight:700; color:{primary_accent}; font-size:13px; margin-bottom:6px;'>1. Standardized Preprocessing (StandardScaler)</div>
+            <div style='color:{text_muted}; font-size:13px; font-family:monospace;'>z = (x - μ) / σ</div>
+            <div style='color:{text_color}; font-size:13px; margin-top:4px;'>Each feature input is zero-centered and scaled using offline dataset means (μ) and standard deviations (σ).</div>
+        </div>
+        <div style='background:{bg_color}; border:1px solid {border_color}; border-radius:10px; padding:16px; margin-bottom:14px;'>
+            <div style='font-weight:700; color:{primary_accent}; font-size:13px; margin-bottom:6px;'>2. Logistic Sigmoid Probability Function</div>
+            <div style='color:{text_muted}; font-size:13px; font-family:monospace;'>P(Y = 1 | X) = 1 / (1 + e<sup>-(β₀ + Σ βᵢ zᵢ)</sup>)</div>
+            <div style='color:{text_color}; font-size:13px; margin-top:4px;'>Calculates the raw log-odds probability of cardiovascular disease between 0.0% and 100.0%.</div>
+        </div>
+        <div style='background:{bg_color}; border:1px solid {border_color}; border-radius:10px; padding:16px;'>
+            <div style='font-weight:700; color:{primary_accent}; font-size:13px; margin-bottom:6px;'>3. Decision Threshold & Post-Processing</div>
+            <div style='color:{text_color}; font-size:13px;'>A strict <b>50.0% decision boundary</b> determines positive versus negative classification, with clinical safety adjustments applied to lifestyle risk inputs.</div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
+    # Feature Importance & Coefficient Ranking
+    st.markdown(f"""
+    <div style='background:{card_bg}; border:1px solid {border_color}; border-radius:14px; padding:22px; margin-bottom: 24px;'>
+        <div style='font-weight:800; font-size:18px; margin-bottom:12px; color:{primary_accent};'>📊 Feature Importance & Model Coefficients</div>
+        <p style='color:{text_muted}; font-size:13px; margin-bottom:16px;'>Relative weight assigned to each standardized clinical metric by the trained Logistic Regression model:</p>
+    """, unsafe_allow_html=True)
+
+    coefficients = [
+        ("Systolic Blood Pressure (ap_hi)", "+0.932", 93, "#ef4444", "Highest positive risk driver"),
+        ("Patient Age (age)", "+0.353", 35, "#f97316", "Significant cumulative risk factor"),
+        ("Cholesterol Level (cholesterol)", "+0.343", 34, "#eab308", "Strong indicator of arterial plaque"),
+        ("Body Weight (weight)", "+0.164", 16, "#3b82f6", "Metabolic BMI marker"),
+        ("Diastolic Blood Pressure (ap_lo)", "+0.105", 11, "#06b6d4", "Secondary vascular pressure marker")
+    ]
+
+    for feat, coef, width, color, desc in coefficients:
+        st.markdown(f"""
+        <div style='background:{bg_color}; border:1px solid {border_color}; border-radius:8px; padding:12px 16px; margin-bottom:10px;'>
+            <div style='display:flex; justify-content:space-between; margin-bottom:6px;'>
+                <span style='font-weight:700; color:{text_color}; font-size:14px;'>{feat}</span>
+                <span style='font-weight:800; color:{color}; font-size:14px;'>Coef: {coef}</span>
+            </div>
+            <div style='height:6px; background:{border_color}; border-radius:3px; overflow:hidden;'>
+                <div style='width:{width}%; height:100%; background:{color}; border-radius:3px;'></div>
+            </div>
+            <div style='font-size:12px; color:{text_muted}; margin-top:4px;'>{desc}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Clinical Risk Stratification Matrix
+    st.markdown(f"""
+    <div style='background:{card_bg}; border:1px solid {border_color}; border-radius:14px; padding:22px; margin-bottom: 24px;'>
+        <div style='font-weight:800; font-size:18px; margin-bottom:14px; color:{primary_accent};'>🏥 Clinical Risk Stratification Matrix</div>
+        <div style='display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:14px;'>
+            <div style='background:rgba(34,197,94,0.08); border:1px solid #22c55e; border-radius:10px; padding:16px;'>
+                <div style='font-weight:800; color:#22c55e; font-size:15px;'>💚 Low Risk</div>
+                <div style='font-size:22px; font-weight:800; color:#22c55e; margin:4px 0;'>0% – 35%</div>
+                <div style='font-size:12px; color:{text_color};'>Normal clinical indicators. Recommended annual routine checkup and wellness maintenance.</div>
+            </div>
+            <div style='background:rgba(234,179,8,0.08); border:1px solid #eab308; border-radius:10px; padding:16px;'>
+                <div style='font-weight:800; color:#eab308; font-size:15px;'>🟡 Moderate Risk</div>
+                <div style='font-size:22px; font-weight:800; color:#eab308; margin:4px 0;'>36% – 55%</div>
+                <div style='font-size:12px; color:{text_color};'>Borderline indicator. Dietary modifications, exercise, and follow-up consultation recommended.</div>
+            </div>
+            <div style='background:rgba(249,115,22,0.08); border:1px solid #f97316; border-radius:10px; padding:16px;'>
+                <div style='font-weight:800; color:#f97316; font-size:15px;'>🟠 High Risk</div>
+                <div style='font-size:22px; font-weight:800; color:#f97316; margin:4px 0;'>56% – 75%</div>
+                <div style='font-size:12px; color:{text_color};'>Elevated cardiovascular risk. Formal medical evaluation & diagnostic workup advised.</div>
+            </div>
+            <div style='background:rgba(239,68,68,0.08); border:1px solid #ef4444; border-radius:10px; padding:16px;'>
+                <div style='font-weight:800; color:#ef4444; font-size:15px;'>🔴 Critical Risk</div>
+                <div style='font-size:22px; font-weight:800; color:#ef4444; margin:4px 0;'>76% – 100%</div>
+                <div style='font-size:12px; color:{text_color};'>High probability of cardiovascular impairment. Prompt clinical diagnosis strongly advised.</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Dataset & Infrastructure Row
     col1, col2 = st.columns(2)
     with col1:
         st.markdown(f"""
         <div style='background:{card_bg}; border:1px solid {border_color}; border-radius:12px; padding:20px; height: 100%;'>
-            <div style='font-weight:700; font-size:16px; margin-bottom:10px; color:{text_color};'>🫀 Dataset & Origin</div>
-            <p style='color:{text_muted}; font-size:14px; line-height:1.6;'>
-                Trained on a robust dataset of <b>70,000 diagnostic records</b>. All dataset features were collected at the exact moment of clinical medical examinations, ensuring objective baseline measurements.
+            <div style='font-weight:700; font-size:16px; margin-bottom:10px; color:{text_color};'>🫀 Dataset & Clinical Origin</div>
+            <p style='color:{text_muted}; font-size:13px; line-height:1.6;'>
+                Trained on a robust dataset of <b>70,000 anonymized diagnostic records</b>. All measurements (blood pressure, lipid profiles, glucose) were recorded during clinical medical examinations.
             </p>
+            <div style='font-size:12px; color:{primary_accent}; font-weight:600; margin-top:10px;'>• 70,000 Examination Records<br>• 11 Clinical & Demographic Features</div>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown(f"""
         <div style='background:{card_bg}; border:1px solid {border_color}; border-radius:12px; padding:20px; height: 100%;'>
-            <div style='font-weight:700; font-size:16px; margin-bottom:10px; color:{text_color};'>⚙️ Technology Stack</div>
-            <ul style='color:{text_muted}; font-size:14px; line-height:1.6; padding-left: 20px;'>
-                <li><b>Framework:</b> Streamlit 1.45+ Engine</li>
-                <li><b>Algorithm:</b> Scikit-Learn Logistic Regression</li>
-                <li><b>Processing:</b> Pandas DataFrames via Flask API</li>
-                <li><b>Interface:</b> Custom HTML/CSS UI Styling</li>
+            <div style='font-weight:700; font-size:16px; margin-bottom:10px; color:{text_color};'>⚙️ Technology & Inference Architecture</div>
+            <ul style='color:{text_muted}; font-size:13px; line-height:1.6; padding-left: 18px; margin-bottom:0;'>
+                <li><b>Local Engine:</b> Scikit-Learn Logistic Regression via Joblib</li>
+                <li><b>API Backend:</b> Flask REST Endpoint Fallback</li>
+                <li><b>UI Framework:</b> Streamlit Custom Reactive Dashboard</li>
+                <li><b>Heuristic Adjustments:</b> Smoking (+6.5%), Alcohol (+4.2%), Activity (-3.0%)</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
