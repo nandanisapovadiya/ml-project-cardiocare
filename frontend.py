@@ -457,61 +457,6 @@ def page_about():
             </div>
             """, unsafe_allow_html=True)
 
-    # Mathematical & Prediction Methodology
-    st.markdown(f"""
-    <div style='background:{card_bg}; border:1px solid {border_color}; border-radius:14px; padding:22px; margin-bottom: 24px;'>
-        <div style='font-weight:800; font-size:18px; margin-bottom:12px; color:{primary_accent};'>🧠 Mathematical Inference Pipeline</div>
-        <p style='color:{text_color}; font-size:14px; line-height:1.7; margin-bottom:12px;'>
-            CardioCare processes patient health markers through a multi-stage statistical pipeline:
-        </p>
-        <div style='background:{bg_color}; border:1px solid {border_color}; border-radius:10px; padding:16px; margin-bottom:14px;'>
-            <div style='font-weight:700; color:{primary_accent}; font-size:13px; margin-bottom:6px;'>1. Standardized Preprocessing (StandardScaler)</div>
-            <div style='color:{text_muted}; font-size:13px; font-family:monospace;'>z = (x - μ) / σ</div>
-            <div style='color:{text_color}; font-size:13px; margin-top:4px;'>Each feature input is zero-centered and scaled using offline dataset means (μ) and standard deviations (σ).</div>
-        </div>
-        <div style='background:{bg_color}; border:1px solid {border_color}; border-radius:10px; padding:16px; margin-bottom:14px;'>
-            <div style='font-weight:700; color:{primary_accent}; font-size:13px; margin-bottom:6px;'>2. Logistic Sigmoid Probability Function</div>
-            <div style='color:{text_muted}; font-size:13px; font-family:monospace;'>P(Y = 1 | X) = 1 / (1 + e<sup>-(β₀ + Σ βᵢ zᵢ)</sup>)</div>
-            <div style='color:{text_color}; font-size:13px; margin-top:4px;'>Calculates the raw log-odds probability of cardiovascular disease between 0.0% and 100.0%.</div>
-        </div>
-        <div style='background:{bg_color}; border:1px solid {border_color}; border-radius:10px; padding:16px;'>
-            <div style='font-weight:700; color:{primary_accent}; font-size:13px; margin-bottom:6px;'>3. Decision Threshold & Post-Processing</div>
-            <div style='color:{text_color}; font-size:13px;'>A strict <b>50.0% decision boundary</b> determines positive versus negative classification, with clinical safety adjustments applied to lifestyle risk inputs.</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Feature Importance & Coefficient Ranking
-    st.markdown(f"""
-    <div style='background:{card_bg}; border:1px solid {border_color}; border-radius:14px; padding:22px; margin-bottom: 24px;'>
-        <div style='font-weight:800; font-size:18px; margin-bottom:12px; color:{primary_accent};'>📊 Feature Importance & Model Coefficients</div>
-        <p style='color:{text_muted}; font-size:13px; margin-bottom:16px;'>Relative weight assigned to each standardized clinical metric by the trained Logistic Regression model:</p>
-    """, unsafe_allow_html=True)
-
-    coefficients = [
-        ("Systolic Blood Pressure (ap_hi)", "+0.932", 93, "#ef4444", "Highest positive risk driver"),
-        ("Patient Age (age)", "+0.353", 35, "#f97316", "Significant cumulative risk factor"),
-        ("Cholesterol Level (cholesterol)", "+0.343", 34, "#eab308", "Strong indicator of arterial plaque"),
-        ("Body Weight (weight)", "+0.164", 16, "#3b82f6", "Metabolic BMI marker"),
-        ("Diastolic Blood Pressure (ap_lo)", "+0.105", 11, "#06b6d4", "Secondary vascular pressure marker")
-    ]
-
-    for feat, coef, width, color, desc in coefficients:
-        st.markdown(f"""
-        <div style='background:{bg_color}; border:1px solid {border_color}; border-radius:8px; padding:12px 16px; margin-bottom:10px;'>
-            <div style='display:flex; justify-content:space-between; margin-bottom:6px;'>
-                <span style='font-weight:700; color:{text_color}; font-size:14px;'>{feat}</span>
-                <span style='font-weight:800; color:{color}; font-size:14px;'>Coef: {coef}</span>
-            </div>
-            <div style='height:6px; background:{border_color}; border-radius:3px; overflow:hidden;'>
-                <div style='width:{width}%; height:100%; background:{color}; border-radius:3px;'></div>
-            </div>
-            <div style='font-size:12px; color:{text_muted}; margin-top:4px;'>{desc}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("</div>", unsafe_allow_html=True)
-
     # Clinical Risk Stratification Matrix
     st.markdown(f"""
     <div style='background:{card_bg}; border:1px solid {border_color}; border-radius:14px; padding:22px; margin-bottom: 24px;'>
